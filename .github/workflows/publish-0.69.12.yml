@@ -1,0 +1,35 @@
+name: Publish verified R-launcher 0.69.12
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publish:
+    if: github.repository == 'stanislawbartoszrutkowski-ops/R-launcher-updates'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Download and verify the prepared signed release
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs=require('fs'),crypto=require('crypto'),assert=require('assert/strict');
+          const spec={"bytes":264005632,"sha256":"543711b232fc6e5e77d6c6af687c03d4d0a3e29bb2076265abfdbc9dec75c458","parts":[{"index":0,"offset":0,"bytes":16777216,"sha256":"6328afc20a27998cbadfe3014c20d5a92e7043b7293f407bc8776d0f39aacc4d"},{"index":1,"offset":16777216,"bytes":16777216,"sha256":"c39128d91f986d7f69d776f2a4f34f874c5318280bcc526c76b84d1cf7a50693"},{"index":2,"offset":33554432,"bytes":16777216,"sha256":"27637e89955bed5fef3c435ab58ecc55ef10216d51be4ac169fc0005161addde"},{"index":3,"offset":50331648,"bytes":16777216,"sha256":"9e7f10ae4397a3819cdd36a688bc8e346cd38e112295d0166aa86ca0d3c81a3a"},{"index":4,"offset":67108864,"bytes":16777216,"sha256":"13e903e4085c403ba16a3609319e45707d7812714faec554a81d78a06f977437"},{"index":5,"offset":83886080,"bytes":16777216,"sha256":"1988ea1661d416104103b174cc525721b8f7379ba912d21b50490492def53e02"},{"index":6,"offset":100663296,"bytes":16777216,"sha256":"66410e66397b487cc31f3f01533dc67fb6d5e706755ab5677b2171da9cb3b4c7"},{"index":7,"offset":117440512,"bytes":16777216,"sha256":"7cab4dc4acc47480879cd02530c28e6b1c2fdd0ca069e13fc12e304c043763ae"},{"index":8,"offset":134217728,"bytes":16777216,"sha256":"c912e4a43b5ed869108f10bad84b93c65de0ec8e9b62ca90035a0c824872ca86"},{"index":9,"offset":150994944,"bytes":16777216,"sha256":"b72084ca13436c93d613f057999f890766de2032c2b7e12d225e678fa20b532c"},{"index":10,"offset":167772160,"bytes":16777216,"sha256":"7713c7e2f1b49a7205128880794d337556b3be01a534708521047a5b085af06f"},{"index":11,"offset":184549376,"bytes":16777216,"sha256":"58bff773fa2c132d9bcb97b55052add914b7450c21ea2ccd958b82efdf6865c5"},{"index":12,"offset":201326592,"bytes":16777216,"sha256":"ad103814110705aeae0942f4dc10ee607c9a72b8ddfb799d46ca675808ce368f"},{"index":13,"offset":218103808,"bytes":16777216,"sha256":"412a4a359ecbb7216f4699ed97c2180004ea06b882772d1dee96a99d936991f8"},{"index":14,"offset":234881024,"bytes":16777216,"sha256":"acb21e62678a8a0e2a383c7d360725ab90d32dca3be157a8e407885ed597ea41"},{"index":15,"offset":251658240,"bytes":12347392,"sha256":"a0e95f0077d2f9ae010c34151867d5eeb7aa9982265c839bb9391bcaa5e36b14"}]},headers={Authorization:'Bearer '+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdteHJieHVkaGtheGJoaXB1b3ZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA5NjU3NTQsImV4cCI6MjEwNjU0MTc1NH0.H_U5J6VBxSIeXAypN7lKA0nsN52MbbDz_TWPEi1tseI",apikey:"sb_publishable_tPBJnu8ghR8gbAuh0DUqZg_T8CUzZiz"};
+          const envelope="{\n  \"payload\": \"eyJ2ZXJzaW9uIjoiMC42OS4xMiIsImZpbGUiOiJSLWxhdW5jaGVyLVNldHVwLTAuNjkuMTIuZXhlIiwic2l6ZSI6MjY0MDA1NjMyLCJzaGE1MTIiOiJkYWQ1ZGU1OWMxOGZjOTI2NjZmNDc4NDc3N2MzM2U2ZjA2MGY5MDBhYmU3ZTUyY2IzZmVhZTg4N2ViMzY0OThmOGZlYjI5MDcxNzBjMzlmMGI1ZTQ2ZWFjYWQzOTA3NDVlNGRmZjNlYjhhZTEyNjI0YmYxOTRlNzFmNzhlZTJhOSIsInVybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9zdGFuaXNsYXdiYXJ0b3N6cnV0a293c2tpLW9wcy9SLWxhdW5jaGVyLXVwZGF0ZXMvcmVsZWFzZXMvZG93bmxvYWQvdjAuNjkuMTIvUi1sYXVuY2hlci1TZXR1cC0wLjY5LjEyLmV4ZSJ9\",\n  \"signature\": \"vuHRyhfwZYcDH4zjUX7eLoIEPa7cU4710mnoj0iZfwnSdu/WEk4VyC7poJ19TwEbnx+z8yvcYgoCzGQuM5h8Ag==\"\n}",key="-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAG181Ve1urIxYi+V24BG/aukO9yQn0UZ6vAMvSh4zS+Q=\n-----END PUBLIC KEY-----\n",notes="# R-launcher 0.69.12\r\n\r\n- R-Engine 0.6.4: 124 bloczki, sceny Menu, wspólne skrypty postaci z kilku brył i zaznaczanie Shift + PPM.\r\n- Nieprzezroczyste szaro-białe bryły i narzędzia rzeźbienia terenu z kolizją, zapisem i rozmiarem do 2048 × 2048.\r\n- Silnik instaluje się we własnym folderze launchera. Po instalacji zostaje przycisk „Uruchom” i powstaje skrót R-Engine na pulpicie z niebieską ikoną.\r\n- Zainstalowany silnik aktualizuje się automatycznie po zalogowaniu. Starsza instalacja wskazana w poprzedniej wersji jest wykrywana i zastępowana nową instalacją zarządzaną przez launcher; jej pliki pozostają zachowane.\r\n- Uruchamianie ze skrótu nadal wymaga konta z aktywnym dostępem. Zachowano nadania czasowe i możliwość zapisania projektu po wygaśnięciu dostępu.\r\n\r\nProjekty nie są częścią folderu plików aktualizacji. Prywatna przebudowa wyglądu launchera i gier nie została dołączona.\r\n";
+          (async()=>{const e=JSON.parse(envelope),payload=Buffer.from(e.payload,'base64');assert(crypto.verify(null,payload,key,Buffer.from(e.signature,'base64')));const m=JSON.parse(payload);assert.equal(m.version,'0.69.12');assert.equal(m.size,spec.bytes);const file='R-launcher-Setup-0.69.12.exe';fs.writeFileSync(file,'');for(const p of spec.parts){let data;for(let attempt=0;attempt<5;attempt++){try{const res=await fetch("https://gmxrbxudhkaxbhipuovs.supabase.co/functions/v1/launcher-engine-transfer"+'?part='+p.index,{headers,signal:AbortSignal.timeout(60000)});if(!res.ok)throw Error('Part '+p.index+' HTTP '+res.status);data=Buffer.from(await res.arrayBuffer());assert.equal(data.length,p.bytes);assert.equal(crypto.createHash('sha256').update(data).digest('hex'),p.sha256);break;}catch(error){if(attempt===4)throw error;await new Promise(r=>setTimeout(r,2000));}}fs.appendFileSync(file,data);console.log('Verified part '+(p.index+1)+'/'+spec.parts.length);}const data=fs.readFileSync(file);assert.equal(crypto.createHash('sha256').update(data).digest('hex'),spec.sha256);assert.equal(crypto.createHash('sha512').update(data).digest('hex'),m.sha512);fs.writeFileSync('update.json',envelope);fs.writeFileSync('RELEASE-NOTES.md',notes);console.log('Installer and signed manifest verified.');})().catch(e=>{console.error(e.message);process.exitCode=1;});
+          NODE
+      - name: Publish all verified assets together
+        shell: bash
+        run: |
+          if gh release view v0.69.12 >/dev/null 2>&1; then
+            test "$(gh release view v0.69.12 --json isDraft --jq .isDraft)" = true
+          else
+            gh release create v0.69.12 --target main --draft --title 'R-launcher 0.69.12 — instalacja i aktualizacje R-Engine' --notes-file RELEASE-NOTES.md
+          fi
+          gh release upload v0.69.12 R-launcher-Setup-0.69.12.exe update.json RELEASE-NOTES.md --clobber
+          gh release view v0.69.12 --json assets > release-assets.json
+          node -e "const f=require('fs'),a=JSON.parse(f.readFileSync('release-assets.json')).assets;for(const n of ['R-launcher-Setup-0.69.12.exe','update.json','RELEASE-NOTES.md']){const x=a.find(v=>v.name===n);if(!x||x.size!==f.statSync(n).size)throw Error('Missing asset '+n)}"
+          gh release edit v0.69.12 --draft=false --latest
